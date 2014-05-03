@@ -225,6 +225,18 @@ class Encounter
 			i+=1
 		end
 		puts "--------end of order--------\n"
+	end
+
+	def add_entity(entity)
+		if(not @entity_list)
+			@entity_list=Array(entity)
+		else
+			@entity_list.push(entity)
+		end	
+	end
+	
+	def reset_turn_order
+		@turn_order=nil
 	end 
 end
 
