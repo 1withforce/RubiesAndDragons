@@ -229,7 +229,7 @@ class Encounter
 end
 
 #Test
-#=begin
+=begin
 bob=Entity.new('Bob', 24)
 joe=Entity.new('Joe',20)
 steve=Entity.new('Steve', 13)
@@ -241,4 +241,4 @@ battle1.drop(joe)
 battle1.view_order
 battle1.damage_entity('Joe', 18, 'cats')
 battle1.view_entities
-#=end
+=end
