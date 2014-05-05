@@ -2,6 +2,7 @@
 class Entity
 	#Initialization
 	def initialize(name, hp)
+		
 		@name=name
 		@maxhp=hp
 		@currenthp=@maxhp
@@ -29,7 +30,7 @@ class Entity
 		return @dying
 	end	
 
-	#Deals damage to Entity. Source is for log
+	#Deals damage to Entity. Source is for log.
 	def damage(points, source='unknown')
 		#Support for Entity argument		
 		if(source.kind_of? Entity)
@@ -122,6 +123,8 @@ class Encounter
 		end
 		view_order()
 	end
+
+	#To help fix the shortcomings of the input turn order method
 	def tweak_turn_order(name, amount)
 		@turn_order.each do |slot|
 			if slot[0].say_name == name
@@ -133,6 +136,7 @@ class Encounter
 		puts "Could not find '#{name}'."
 	end
 	
+	#called when two rolls are input the same in turn order
 	def resolve_ties!(rolls)
 		i = 0 
 		modifiers=Array.new(rolls.size,0.0)
@@ -169,16 +173,42 @@ class Encounter
 		end 
 	end
 
+	#Calls the Entity.damage function on the named entity in the entity list.
 	def damage_entity(name, points, source='Unknown')
+		if points < 0
+			puts "Can't do negative damage. Use heal_entity instead."
+			return
+		end
 		@entity_list.each do |entity|
 			if name==entity.say_name
 				entity.damage(points, source)
+				if entity.is_dying?
+					if input("Drop #{entity.say_name} from order?", ['yes','no']) == 'yes'
+						drop(entity)
+					end
+				end
+				return
+			end	
+		end	
+		puts "Did not find entity."
+	end
+	
+	#Calls the Entity.heal function on the named entity in the entity list.
+	def heal_entity(name, points, source='Unknown')
+		if points < 0 
+			puts "Can't do negative healing. Use damage_entity instead."
+			return
+		end
+		@entity_list.each do |entity|
+			if name==entity.say_name
+				entity.heal(points, source)
 				return
 			end	
 		end	
 		puts "Did not find entity."
 	end
 
+	#Method for getting and checking user input; might move out of class
 	def input(prompt, options)
 		print prompt
 		valid_input=false
@@ -195,17 +225,19 @@ class Encounter
 	end
 						
 	
-	#Drops entity from initiative ordering
+	#Drops entity from initiative ordering and entity list
 	def drop(entity)
 		for entry in @turn_order
 			if(entry[0]==entity)
 				puts "Dropping #{@turn_order.delete(entry)[0].say_name} from turn order"
+				puts "Dropping #{@entity_list.delete(entry[0]).say_name} from entity list"
 				view_order
 				break
 			end
 		end  
 	end
 	
+	#Displays all entities in the list with hp and status
 	def view_entities()
 		puts "-------Entities in Encounter-------"
 		puts "|\tName\t|\thp\t|\tBloodied?\t|\tUnconscious?\t|\tDying?\t|"
@@ -216,7 +248,7 @@ class Encounter
 		end
 	end
 			
-	#Display turn order
+	#Display turn order.
 	def view_order()
 		i=1
 		puts "\n-------Initiative order-------"
@@ -226,7 +258,9 @@ class Encounter
 		end
 		puts "--------end of order--------\n"
 	end
+	
 
+	#Adds an entity to the list of entities.
 	def add_entity(entity)
 		if(not @entity_list)
 			@entity_list=Array(entity)
@@ -236,7 +270,7 @@ class Encounter
 	end
 	
 	def reset_turn_order
-		@turn_order=nil
+		@turn_nil=order
 	end 
 end
 
