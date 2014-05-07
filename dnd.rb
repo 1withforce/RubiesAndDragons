@@ -100,9 +100,23 @@ end
 
 class Encounter
 	def initialize(entity_list=nil, turn_order=nil)
+		@encounter_name="Unnamed Encounter"
 		@entity_list=entity_list
 		@turn_order=turn_order
 	end
+
+	def ret_entity_list
+		return @entity_list	
+	end
+	
+	def ret_encounter_name
+		return @encounter_name
+	end
+	
+	def set_encounter_name(name)
+		@encounter_name=name
+	end
+
 	def input_turn_order()
 		#Check to see if a turn order is provided
 		if(not @entity_list)
@@ -263,14 +277,14 @@ class Encounter
 	#Adds an entity to the list of entities.
 	def add_entity(entity)
 		if(not @entity_list)
-			@entity_list=Array(entity)
+			@entity_list=Array(1, entity)
 		else
 			@entity_list.push(entity)
 		end	
 	end
 	
 	def reset_turn_order
-		@turn_nil=order
+		@turn_order=nil
 	end 
 end
 
