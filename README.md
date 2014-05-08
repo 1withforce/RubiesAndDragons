@@ -9,3 +9,12 @@ For Linux:
 cd  into the directory with dnd.rb and run >> irb -I ./ -r 'dnd.rb'
 
 Then create an encounter and use the class functions accordingly. An example is provided at the end of dnd.rb
+
+For Windows:
+Coming soon
+
+For Apple:
+Probably not coming soon
+
+dragon_shoes.rb:
+This is a rudimentary dnd.rb GUI using ruby shoes. As it stands right now, it's not very useful but it's coming along. This is my first attempt at making a ruby GUI so beware of messy code.
