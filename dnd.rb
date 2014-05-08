@@ -60,7 +60,7 @@ class Entity
 	#Heals Entity. Source is for log.
 	def heal(points, source)
 		#Support for Entity as source argument		
-		if(source.class='Entity')
+		if(source.kind_of? Entity)
 			source=source.say_name
 		end
 		#Do healing
@@ -99,7 +99,7 @@ class Entity
 end
 
 class Encounter
-	def initialize(entity_list=nil, turn_order=nil)
+	def initialize(entity_list=Array.new, turn_order=Array.new)
 		@encounter_name="Unnamed Encounter"
 		@entity_list=entity_list
 		@turn_order=turn_order
@@ -196,11 +196,6 @@ class Encounter
 		@entity_list.each do |entity|
 			if name==entity.say_name
 				entity.damage(points, source)
-				if entity.is_dying?
-					if input("Drop #{entity.say_name} from order?", ['yes','no']) == 'yes'
-						drop(entity)
-					end
-				end
 				return
 			end	
 		end	
@@ -241,6 +236,7 @@ class Encounter
 	
 	#Drops entity from initiative ordering and entity list
 	def drop(entity)
+=begin
 		for entry in @turn_order
 			if(entry[0]==entity)
 				puts "Dropping #{@turn_order.delete(entry)[0].say_name} from turn order"
@@ -249,6 +245,8 @@ class Encounter
 				break
 			end
 		end  
+=end
+		@entity_list.delete(entity)		
 	end
 	
 	#Displays all entities in the list with hp and status
