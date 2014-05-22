@@ -13,7 +13,7 @@ class Entity
 		@log.push("Started with #{@currenthp}hp")
 	end
 
-	#Functions for retrieving values (will probably update with cleaner way)
+	#Functions for retrieving values
 	def say_name
 		return @name
 	end
@@ -35,6 +35,10 @@ class Entity
 		#Support for Entity argument		
 		if(source.kind_of? Entity)
 			source=source.say_name
+		end
+		#Assign 'unknown' to blank source
+		if(source =='') 
+			source='unknown' 
 		end
 		#Deal Damage		
 		@currenthp -= points
@@ -58,10 +62,14 @@ class Entity
 	end
 
 	#Heals Entity. Source is for log.
-	def heal(points, source)
+	def heal(points, source='unknown')
 		#Support for Entity as source argument		
 		if(source.kind_of? Entity)
 			source=source.say_name
+		end
+		#Assign 'unknown' to blank source
+		if(source =='') 
+			source='unknown' 
 		end
 		#Do healing
 		@currenthp += points
@@ -90,12 +98,15 @@ class Entity
 
 	#Displays combat log
 	def view_log()
-		puts "\n-------Combat Log for #{@name}-------"
+		log=""
+		log += "-------Combat Log for #{@name}-------\n"
 		for entry in @log
-			puts entry
+			log += entry +"\n"
 		end
-		puts "-----------End of Log-----------\n"
-	end	
+		log += "-----------End of Log-----------"
+		return log
+	end
+		
 end
 
 class Encounter
@@ -105,6 +116,7 @@ class Encounter
 		@turn_order=turn_order
 	end
 
+	#Functions for accessing/changing class variables
 	def ret_entity_list
 		return @entity_list	
 	end
